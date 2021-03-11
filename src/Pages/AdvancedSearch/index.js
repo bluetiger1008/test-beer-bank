@@ -38,7 +38,7 @@ const AdvancedSearch = () => {
   const searchBeers = async (pageIndex) => {
     try {
       const res = await searchBeerAPI(
-        `?page=${pageIndex}&per_page=6${
+        `?page=${pageIndex}&per_page=9${
           searchFields.maxIbu !== '' ? `&ibu_lt=${searchFields.maxIbu}` : ''
         }${searchFields.minIbu !== '' ? `&ibu_gt=${searchFields.minIbu}` : ''}${
           searchFields.maxAbv !== '' ? `&abv_lt=${searchFields.maxAbv}` : ''

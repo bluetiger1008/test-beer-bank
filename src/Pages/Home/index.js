@@ -33,7 +33,7 @@ const Home = () => {
   const searchBeers = async (pageIndex) => {
     try {
       const res = await searchBeerAPI(
-        `?page=${pageIndex}&per_page=6${
+        `?page=${pageIndex}&per_page=9${
           searchName !== '' ? `&beer_name=${searchName}` : ''
         }`
       );
