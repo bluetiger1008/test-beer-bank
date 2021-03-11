@@ -49,7 +49,7 @@ const AdvancedSearch = () => {
             ? `&brewed_before=${searchFields.brewedBefore}`
             : ''
         }${
-          searchFields.brewed_after !== ''
+          searchFields.brewedAfter !== ''
             ? `&brewedAfter=${searchFields.brewedAfter}`
             : ''
         }`
