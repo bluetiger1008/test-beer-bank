@@ -1,7 +1,17 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Container, Grid, Box, TextField } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import {
+  Container,
+  Grid,
+  Box,
+  TextField,
+  FormControl,
+  InputLabel,
+  FilledInput,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import MaskedInput from 'react-text-mask';
 
 import { searchBeerAPI } from '../../Helpers/apis';
 import Header from '../../Components/Header';
@@ -16,7 +26,37 @@ const useStyles = makeStyles((theme) => ({
       background: 'white',
     },
   },
+  maskInput: {
+    width: 200,
+    margin: '0.5rem',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    overflow: 'hidden',
+    '& .MuiFilledInput-input': {
+      background: 'white',
+    },
+  },
 }));
+
+function TextMaskCustom(props) {
+  const { inputRef, ...other } = props;
+
+  return (
+    <MaskedInput
+      {...other}
+      ref={(ref) => {
+        inputRef(ref ? ref.inputElement : null);
+      }}
+      mask={[/\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  );
+}
+
+TextMaskCustom.propTypes = {
+  inputRef: PropTypes.func.isRequired,
+};
 
 const AdvancedSearch = () => {
   const classes = useStyles();
@@ -42,7 +82,7 @@ const AdvancedSearch = () => {
           searchFields.maxIbu !== '' ? `&ibu_lt=${searchFields.maxIbu}` : ''
         }${searchFields.minIbu !== '' ? `&ibu_gt=${searchFields.minIbu}` : ''}${
           searchFields.maxAbv !== '' ? `&abv_lt=${searchFields.maxAbv}` : ''
-        }${searchFields.minAbv !== '' ? `&abv_gt=${searchFields.maxAbv}` : ''}${
+        }${searchFields.minAbv !== '' ? `&abv_gt=${searchFields.minAbv}` : ''}${
           searchFields.maxEbc !== '' ? `&ebc_lt=${searchFields.maxEbc}` : ''
         }${searchFields.minEbc !== '' ? `&ebc_gt=${searchFields.minEbc}` : ''}${
           searchFields.brewedBefore !== ''
@@ -151,24 +191,30 @@ const AdvancedSearch = () => {
             onChange={handleChange}
             value={searchFields.minEbc}
           />
-          <TextField
-            id='outlined-basic'
-            label='Brewed before'
-            variant='filled'
-            className={classes.input}
-            name='brewedBefore'
-            onChange={handleChange}
-            value={searchFields.brewedBefore}
-          />
-          <TextField
-            id='outlined-basic'
-            label='Brewed after'
-            variant='filled'
-            className={classes.input}
-            name='brewedAfter'
-            onChange={handleChange}
-            value={searchFields.brewedAfter}
-          />
+          <FormControl variant='filled' className={classes.maskInput}>
+            <InputLabel htmlFor='formatted-text-mask-input'>
+              Brewed before
+            </InputLabel>
+            <FilledInput
+              value={searchFields.brewedBefore}
+              onChange={handleChange}
+              name='brewedBefore'
+              id='formatted-text-mask-input'
+              inputComponent={TextMaskCustom}
+            />
+          </FormControl>
+          <FormControl variant='filled' className={classes.maskInput}>
+            <InputLabel htmlFor='formatted-text-mask-input'>
+              Brewed after
+            </InputLabel>
+            <FilledInput
+              value={searchFields.brewedAfter}
+              onChange={handleChange}
+              name='brewedAfter'
+              id='formatted-text-mask-input'
+              inputComponent={TextMaskCustom}
+            />
+          </FormControl>
         </Box>
       </Header>
       <Container>
